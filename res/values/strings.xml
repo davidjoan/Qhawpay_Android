@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="hello">Hello World</string>
+    <string name="app_name">Qhawpay</string>
+    <string name="new_fragment">New Fragment</string>
+    <string name="hello_world">Hola Mundo</string>
+    <string name="base_uri">http://backend.qhawpay.pe/api.php</string>
+    
+</resources>
