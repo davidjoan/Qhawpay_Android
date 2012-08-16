@@ -5,5 +5,10 @@
     <string name="new_fragment">New Fragment</string>
     <string name="hello_world">Hola Mundo</string>
     <string name="base_uri">http://backend.qhawpay.pe/api.php</string>
+    <string name="category_base_uri">http://backend.qhawpay.pe/uploads/category_images/</string>
+    <string name="service_base_uri">http://backend.qhawpay.pe/uploads/service_images/</string>
+    <string name="fragment_context_menu_msg">Context Menú</string>
+    <string name="long_press">Pulsación Larga</string>
+    
     
 </resources>

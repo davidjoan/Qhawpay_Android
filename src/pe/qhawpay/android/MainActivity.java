@@ -38,7 +38,7 @@ public class MainActivity extends SherlockFragmentActivity {
                 FragmentCategory.CategoryListFragment.class, null);
         
         mTabsAdapter.addTab(mTabHost.newTabSpec("servicios").setIndicator("Servicios"),
-                LoaderCustomSupport.AppListFragment.class, null);
+                FragmentService.ServiceListFragment.class, null);
 
         mTabsAdapter.addTab(mTabHost.newTabSpec("the_best").setIndicator("Mejores"),
                 FragmentStackSupport.CountingFragment.class, null);        

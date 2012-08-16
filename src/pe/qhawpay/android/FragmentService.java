@@ -14,8 +14,8 @@ import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 
-import pe.qhawpay.android.domain.Category;
-import pe.qhawpay.android.domain.CategoryList;
+import pe.qhawpay.android.domain.Service;
+import pe.qhawpay.android.domain.ServiceList;
 import android.content.Context;
 
 
@@ -28,32 +28,24 @@ import android.support.v4.widget.SearchViewCompat;
 import android.support.v4.widget.SearchViewCompat.OnQueryTextListenerCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.SherlockListFragment;
-
-
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
 import com.androidquery.AQuery;
 
-public class FragmentCategory extends SherlockFragmentActivity {
+public class FragmentService extends SherlockFragmentActivity {
 
-	protected static final String TAG = FragmentCategory.class.getSimpleName();
-
+	protected static final String TAG = FragmentService.class.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +55,7 @@ public class FragmentCategory extends SherlockFragmentActivity {
 
 		// Create the list fragment and add it as our sole content.
 		if (fm.findFragmentById(android.R.id.content) == null) {
-			CategoryListFragment list = new CategoryListFragment();
+			ServiceListFragment list = new ServiceListFragment();
 			fm.beginTransaction().add(android.R.id.content, list).commit();
 		}
 	}
@@ -71,11 +63,11 @@ public class FragmentCategory extends SherlockFragmentActivity {
 	/**
 	 * Perform alphabetical comparison of application entry objects.
 	 */
-	public static final Comparator<Category> ALPHA_COMPARATOR = new Comparator<Category>() {
+	public static final Comparator<Service> ALPHA_COMPARATOR = new Comparator<Service>() {
 		private final Collator sCollator = Collator.getInstance();
 
 		@Override
-		public int compare(Category object1, Category object2) {
+		public int compare(Service object1, Service object2) {
 			return sCollator.compare(object1.getName(), object2.getName());
 		}
 	};
@@ -85,12 +77,12 @@ public class FragmentCategory extends SherlockFragmentActivity {
 	/**
 	 * A custom Loader that loads all of the installed applications.
 	 */
-	public static class CategoryListLoader extends AsyncTaskLoader<List<Category>> {
+	public static class ServiceListLoader extends AsyncTaskLoader<List<Service>> {
 
-		List<Category> mCategories;
+		List<Service> mservices;
 		private String filter;
 
-		public CategoryListLoader(Context context, String textFilter) {
+		public ServiceListLoader(Context context, String textFilter) {
 			super(context);
 			filter = textFilter;
 
@@ -102,18 +94,18 @@ public class FragmentCategory extends SherlockFragmentActivity {
 		 * published by the loader.
 		 */
 		@Override
-		public List<Category> loadInBackground() {
-			List<Category> categories = null;
+		public List<Service> loadInBackground() {
+			List<Service> services = null;
 			try {
 				// The URL for making the GET request
 				String url;
 				if(filter == null)
 				{
-					url = getContext().getString(R.string.base_uri)+ "/category/name/0/created_at/a/100/1.json";
+					url = getContext().getString(R.string.base_uri)+ "/service/name/0/created_at/a/100/1.json";
 				}
 				else
 				{
-					url = getContext().getString(R.string.base_uri)+ "/category/name/"+filter+"/created_at/a/100/1.json";
+					url = getContext().getString(R.string.base_uri)+ "/service/name/"+filter+"/created_at/a/100/1.json";
 				}
 				
 				Log.i(TAG, "API REST get called: " + url);
@@ -130,18 +122,18 @@ public class FragmentCategory extends SherlockFragmentActivity {
 				restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
 
 				// Make the HTTP GET request, marshaling the response from JSON to an array of Events
-				ResponseEntity<CategoryList> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, CategoryList.class);
+				ResponseEntity<ServiceList> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, ServiceList.class);
 
 				// convert the array to a list and return it
-				categories = responseEntity.getBody().getCategories();
-				Collections.sort(categories, ALPHA_COMPARATOR);
-				return categories;
+				services = responseEntity.getBody().getServices();
+				Collections.sort(services, ALPHA_COMPARATOR);
+				return services;
 
 			} catch (Exception e) {
 				Log.e(TAG, e.getMessage(), e);
 			}
 
-			return categories;
+			return services;
 		}
 
 		/**
@@ -150,28 +142,28 @@ public class FragmentCategory extends SherlockFragmentActivity {
 		 * adds a little more logic.
 		 */
 		@Override
-		public void deliverResult(List<Category> categories) {
+		public void deliverResult(List<Service> services) {
 			if (isReset()) {
 				// An async query came in while the loader is stopped. We
 				// don't need the result.
-				if (categories != null) {
-					onReleaseResources(categories);
+				if (services != null) {
+					onReleaseResources(services);
 				}
 			}
-			List<Category> oldCategories = categories;
-			mCategories = categories;
+			List<Service> oldservices = services;
+			mservices = services;
 
 			if (isStarted()) {
 				// If the Loader is currently started, we can immediately
 				// deliver its results.
-				super.deliverResult(categories);
+				super.deliverResult(services);
 			}
 
 			// At this point we can release the resources associated with
 			// 'oldApps' if needed; now that the new result is delivered we
 			// know that it is no longer in use.
-			if (oldCategories != null) {
-				onReleaseResources(oldCategories);
+			if (oldservices != null) {
+				onReleaseResources(oldservices);
 			}
 		}
 
@@ -180,14 +172,14 @@ public class FragmentCategory extends SherlockFragmentActivity {
 		 */
 		@Override
 		protected void onStartLoading() {
-			if (mCategories != null) {
+			if (mservices != null) {
 				// If we currently have a result available, deliver it
 				// immediately.
-				deliverResult(mCategories);
+				deliverResult(mservices);
 			}
 
 			
-			if (takeContentChanged() || mCategories == null ) {
+			if (takeContentChanged() || mservices == null ) {
 				// If the data has changed since the last time it was loaded
 				// or is not currently available, start a load.
 				forceLoad();
@@ -207,12 +199,12 @@ public class FragmentCategory extends SherlockFragmentActivity {
 		 * Handles a request to cancel a load.
 		 */
 		@Override
-		public void onCanceled(List<Category> categories) {
-			super.onCanceled(categories);
+		public void onCanceled(List<Service> services) {
+			super.onCanceled(services);
 
 			// At this point we can release the resources associated with 'apps'
 			// if needed.
-			onReleaseResources(categories);
+			onReleaseResources(services);
 		}
 
 		/**
@@ -227,9 +219,9 @@ public class FragmentCategory extends SherlockFragmentActivity {
 
 			// At this point we can release the resources associated with 'apps'
 			// if needed.
-			if (mCategories != null) {
-				onReleaseResources(mCategories);
-				mCategories = null;
+			if (mservices != null) {
+				onReleaseResources(mservices);
+				mservices = null;
 			}
 
 		}
@@ -238,25 +230,25 @@ public class FragmentCategory extends SherlockFragmentActivity {
 		 * Helper function to take care of releasing resources associated with
 		 * an actively loaded data set.
 		 */
-		protected void onReleaseResources(List<Category> categories) {
+		protected void onReleaseResources(List<Service> services) {
 			// For a simple List<> there is nothing to do. For something
 			// like a Cursor, we would close it here.
 		}
 	}
 
-	public static class CategoryListAdapter extends ArrayAdapter<Category> {
+	public static class ServiceListAdapter extends ArrayAdapter<Service> {
 		private final LayoutInflater mInflater;
 
-		public CategoryListAdapter(Context context) {
+		public ServiceListAdapter(Context context) {
 			super(context, android.R.layout.simple_list_item_2);
 			mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
 
-		public void setData(List<Category> datos) {
+		public void setData(List<Service> datos) {
 			this.clear();
 			if (datos != null) {
-				for (Category category : datos) {
-					add(category);
+				for (Service Service : datos) {
+					add(Service);
 				}
 			}
 		}
@@ -275,7 +267,9 @@ public class FragmentCategory extends SherlockFragmentActivity {
 				view = convertView;
 			}
 
-			Category item = getItem(position);
+			Service item = getItem(position);
+
+			
 			
 			
 			if(item.getImage() == null || item.getImage() == "")
@@ -285,26 +279,25 @@ public class FragmentCategory extends SherlockFragmentActivity {
 			else
 			{
 				AQuery aq = new AQuery(view);
-				aq.id(R.id.icon).image(getContext().getString(R.string.category_base_uri)+ item.getImage());
+				aq.id(R.id.icon).image(getContext().getString(R.string.service_base_uri)+ item.getImage());
 			}
-		
+			
 			((TextView) view.findViewById(R.id.text)).setText(item.getName());
 
 			return view;
 		}
 	}
 
-	public static class CategoryListFragment extends SherlockListFragment
-			implements LoaderManager.LoaderCallbacks<List<Category>> {
+	public static class ServiceListFragment extends SherlockListFragment
+			implements LoaderManager.LoaderCallbacks<List<Service>> {
 
 		// This is the Adapter being used to display the list's data.
-		CategoryListAdapter mAdapter;
+		ServiceListAdapter mAdapter;
 
 		// If non-null, this is the current filter the user has provided.
 		String mCurFilter;
 
 		OnQueryTextListenerCompat mOnQueryTextListenerCompat;
-		
 
 		@Override
 		public void onActivityCreated(Bundle savedInstanceState) {
@@ -318,7 +311,7 @@ public class FragmentCategory extends SherlockFragmentActivity {
 			setHasOptionsMenu(true);
 
 			// Create an empty adapter we will use to display the loaded data.
-			mAdapter = new CategoryListAdapter(getActivity());
+			mAdapter = new ServiceListAdapter(getActivity());
 			setListAdapter(mAdapter);
 
 			// Start out with a progress indicator.
@@ -327,17 +320,11 @@ public class FragmentCategory extends SherlockFragmentActivity {
 			// Prepare the loader. Either re-connect with an existing one,
 			// or start a new one.
 			getLoaderManager().initLoader(0, null, this);
-			
-			registerForContextMenu(getListView());
-			
-
-			
 		}
 
 		@Override
 		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 			// Place an action bar item for searching.
-
 			MenuItem item = menu.add("Buscar");
 			item.setIcon(android.R.drawable.ic_menu_search);
 			item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -354,12 +341,11 @@ public class FragmentCategory extends SherlockFragmentActivity {
 								mCurFilter = !TextUtils.isEmpty(newText) ? newText : null;
 								Log.i("LoaderCustom", "Text Filter: " + mCurFilter);
 								//mAdapter.getFilter().filter(mCurFilter);
-								getLoaderManager().restartLoader(0, null, CategoryListFragment.this);
+								getLoaderManager().restartLoader(0, null, ServiceListFragment.this);
 								
 								return true;
 							}
 						});
-				
 				item.setActionView(searchView);
 			}
 		}
@@ -368,22 +354,19 @@ public class FragmentCategory extends SherlockFragmentActivity {
 		public void onListItemClick(ListView l, View v, int position, long id) {
 			// Insert desired behavior here.
 			Log.i("LoaderCustom", "Item clicked: " + id);
-			
-
-			
 		}
 
 		@Override
-		public Loader<List<Category>> onCreateLoader(int id, Bundle args) {
+		public Loader<List<Service>> onCreateLoader(int id, Bundle args) {
 			// This is called when a new Loader needs to be created. This
 			// sample only has one Loader with no arguments, so it is simple.
 			
 			Log.i(TAG, "on create loader: " + mCurFilter);			
-			return new CategoryListLoader(getActivity(), mCurFilter);
+			return new ServiceListLoader(getActivity(), mCurFilter);
 		}
 
 		@Override
-		public void onLoadFinished(Loader<List<Category>> loader, List<Category> data) {
+		public void onLoadFinished(Loader<List<Service>> loader, List<Service> data) {
 			
 			// Set the new data in the adapter.
 			mAdapter.setData(data);
@@ -397,61 +380,10 @@ public class FragmentCategory extends SherlockFragmentActivity {
 		}
 
 		@Override
-		public void onLoaderReset(Loader<List<Category>> loader) {
+		public void onLoaderReset(Loader<List<Service>> loader) {
 			// Clear the data in the adapter.
 			mAdapter.setData(null);
 		}
-		
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-            super.onCreateContextMenu(menu, v, menuInfo);
-            menu.add(Menu.NONE, R.id.a_item, Menu.NONE, "Menu A");
-            menu.add(Menu.NONE, R.id.b_item, Menu.NONE, "Menu B");
-        }
-
-        @Override
-        public boolean onContextItemSelected(android.view.MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.a_item:
-                    Log.i("ContextMenu", "Item 1a was chosen");
-                    return true;
-                case R.id.b_item:
-                    Log.i("ContextMenu", "Item 1b was chosen");
-                    return true;
-            }
-            return super.onContextItemSelected(item);
-        }
 	}
-	
-    public static class ContextMenuFragment extends SherlockFragment {
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-        	Log.i(TAG, "on Create View Context Menu: ");
-            View root = inflater.inflate(R.layout.list_item_icon_text, container, false);
-            registerForContextMenu(root.findViewById(R.id.text));
-            return root;
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-            super.onCreateContextMenu(menu, v, menuInfo);
-            menu.add(Menu.NONE, R.id.a_item, Menu.NONE, "Menu A");
-            menu.add(Menu.NONE, R.id.b_item, Menu.NONE, "Menu B");
-        }
-
-        @Override
-        public boolean onContextItemSelected(android.view.MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.a_item:
-                    Log.i("ContextMenu", "Item 1a was chosen");
-                    return true;
-                case R.id.b_item:
-                    Log.i("ContextMenu", "Item 1b was chosen");
-                    return true;
-            }
-            return super.onContextItemSelected(item);
-        }
-    }
 }
