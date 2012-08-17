@@ -33,16 +33,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.SherlockListFragment;
-
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -299,6 +298,8 @@ public class FragmentCategory extends SherlockFragmentActivity {
 
 		// This is the Adapter being used to display the list's data.
 		CategoryListAdapter mAdapter;
+		
+		Category categorySelected;
 
 		// If non-null, this is the current filter the user has provided.
 		String mCurFilter;
@@ -369,16 +370,15 @@ public class FragmentCategory extends SherlockFragmentActivity {
 			// Insert desired behavior here.
 			Log.i("LoaderCustom", "Item clicked: " + id);
 			
-
-			
+			Category categorySelected = mAdapter.getItem((int) id);
+			Toast.makeText(getActivity(), "Categoria Clickeada: "+categorySelected.getName(), Toast.LENGTH_SHORT).show();
+						
 		}
 
 		@Override
 		public Loader<List<Category>> onCreateLoader(int id, Bundle args) {
 			// This is called when a new Loader needs to be created. This
 			// sample only has one Loader with no arguments, so it is simple.
-			
-			Log.i(TAG, "on create loader: " + mCurFilter);			
 			return new CategoryListLoader(getActivity(), mCurFilter);
 		}
 
@@ -405,53 +405,45 @@ public class FragmentCategory extends SherlockFragmentActivity {
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
             super.onCreateContextMenu(menu, v, menuInfo);
-            menu.add(Menu.NONE, R.id.a_item, Menu.NONE, "Menu A");
-            menu.add(Menu.NONE, R.id.b_item, Menu.NONE, "Menu B");
+            
+
+            
+            menu.add(Menu.NONE, R.id.share_item, Menu.NONE, "Compartir");
+            menu.add(Menu.NONE, R.id.near_hear_item, Menu.NONE, "Cerca de Aqui");
+            menu.add(Menu.NONE, R.id.ranking_item, Menu.NONE, "Ranking");
         }
 
         @Override
         public boolean onContextItemSelected(android.view.MenuItem item) {
+        	
+            AdapterView.AdapterContextMenuInfo info;
+            try {
+                info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            } catch (ClassCastException e) {
+                Log.e("", "bad menuInfo", e);
+                return false;
+            }
+            Category category = (Category) getListAdapter().getItem(info.position);
+            Toast.makeText(getActivity(), "Categoria Seleccionada."+category.getName(), Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "id = " + category.getName());
+            
+            
             switch (item.getItemId()) {
-                case R.id.a_item:
+                case R.id.share_item:
                     Log.i("ContextMenu", "Item 1a was chosen");
                     return true;
-                case R.id.b_item:
+                case R.id.near_hear_item:
                     Log.i("ContextMenu", "Item 1b was chosen");
                     return true;
+                case R.id.ranking_item:
+                    Log.i("ContextMenu", "Item 1c was chosen");
+                    return true;
             }
+            
+            
+          
+            
             return super.onContextItemSelected(item);
         }
 	}
-	
-    public static class ContextMenuFragment extends SherlockFragment {
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-        	Log.i(TAG, "on Create View Context Menu: ");
-            View root = inflater.inflate(R.layout.list_item_icon_text, container, false);
-            registerForContextMenu(root.findViewById(R.id.text));
-            return root;
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-            super.onCreateContextMenu(menu, v, menuInfo);
-            menu.add(Menu.NONE, R.id.a_item, Menu.NONE, "Menu A");
-            menu.add(Menu.NONE, R.id.b_item, Menu.NONE, "Menu B");
-        }
-
-        @Override
-        public boolean onContextItemSelected(android.view.MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.a_item:
-                    Log.i("ContextMenu", "Item 1a was chosen");
-                    return true;
-                case R.id.b_item:
-                    Log.i("ContextMenu", "Item 1b was chosen");
-                    return true;
-            }
-            return super.onContextItemSelected(item);
-        }
-    }
 }

@@ -305,7 +305,7 @@ public class FragmentService extends SherlockFragmentActivity {
 
 			// Give some text to display if there is no data. In a real
 			// application this would come from a resource.
-			setEmptyText("Sin Categorías");
+			setEmptyText("Sin Servicios");
 
 			// We have a menu item to show in action bar.
 			setHasOptionsMenu(true);

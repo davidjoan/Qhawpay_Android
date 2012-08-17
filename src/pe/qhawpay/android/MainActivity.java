@@ -41,7 +41,7 @@ public class MainActivity extends SherlockFragmentActivity {
                 FragmentService.ServiceListFragment.class, null);
 
         mTabsAdapter.addTab(mTabHost.newTabSpec("the_best").setIndicator("Mejores"),
-                FragmentStackSupport.CountingFragment.class, null);        
+        		FragmentService.ServiceListFragment.class, null);        
         
         if (savedInstanceState != null) {
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
