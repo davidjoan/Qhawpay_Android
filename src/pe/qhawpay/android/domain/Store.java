@@ -44,16 +44,6 @@ import com.google.gson.annotations.SerializedName;
 public class Store {
 	
 	private Long  id;
-	
-	private Customer customer;
-	
-	private List<Category> categories;
-	
-	private List<Service> services;
-	
-	private List<Address> addresses;
-	
-	private List<Photo> photos;
 		
     private String ruc;
     
@@ -70,6 +60,16 @@ public class Store {
     private String description;
     
     private String datetime;
+    
+	private Customer customer;
+	
+	private List<Category> categories;
+	
+	private List<Service> services;
+	
+	private List<Address> addresses;
+	
+	private List<Photo> photos;    
     
     @SerializedName(value="qty-votes")
     private String qtyVotes;

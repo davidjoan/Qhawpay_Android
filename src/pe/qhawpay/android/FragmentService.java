@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import pe.qhawpay.android.domain.Service;
 import pe.qhawpay.android.domain.ServiceList;
 import android.content.Context;
+import android.content.Intent;
 
 
 import android.os.Bundle;
@@ -354,6 +355,10 @@ public class FragmentService extends SherlockFragmentActivity {
 		public void onListItemClick(ListView l, View v, int position, long id) {
 			// Insert desired behavior here.
 			Log.i("LoaderCustom", "Item clicked: " + id);
+			
+			Intent intent = new Intent();
+	        intent.setClass(getActivity(), PullToRefreshActivity.class);
+	        startActivity(intent);
 		}
 
 		@Override

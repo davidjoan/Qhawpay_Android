@@ -21,7 +21,10 @@
 
     <ImageView android:id="@+id/icon"
         android:layout_width="48dip"
-        android:layout_height="48dip" />
+        android:layout_height="48dip"
+        android:contentDescription="@string/store_content_description" />
+    
+  
 
     <TextView android:id="@+id/text"
         android:layout_gravity="center_vertical"

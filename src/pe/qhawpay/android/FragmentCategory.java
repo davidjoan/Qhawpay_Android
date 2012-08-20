@@ -17,9 +17,11 @@ import org.springframework.web.client.RestTemplate;
 import pe.qhawpay.android.domain.Category;
 import pe.qhawpay.android.domain.CategoryList;
 import android.content.Context;
+import android.content.Intent;
 
 
 import android.os.Bundle;
+
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -52,6 +54,7 @@ import com.androidquery.AQuery;
 public class FragmentCategory extends SherlockFragmentActivity {
 
 	protected static final String TAG = FragmentCategory.class.getSimpleName();
+
 
 
 	@Override
@@ -108,11 +111,11 @@ public class FragmentCategory extends SherlockFragmentActivity {
 				String url;
 				if(filter == null)
 				{
-					url = getContext().getString(R.string.base_uri)+ "/category/name/0/created_at/a/100/1.json";
+					url = getContext().getString(R.string.base_uri)+ "/category/name/0/created_at/a/10/1.json";
 				}
 				else
 				{
-					url = getContext().getString(R.string.base_uri)+ "/category/name/"+filter+"/created_at/a/100/1.json";
+					url = getContext().getString(R.string.base_uri)+ "/category/name/"+filter+"/created_at/a/10/1.json";
 				}
 				
 				Log.i(TAG, "API REST get called: " + url);
@@ -279,7 +282,7 @@ public class FragmentCategory extends SherlockFragmentActivity {
 			
 			if(item.getImage() == null || item.getImage() == "")
 			{
-				((ImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.icon);	
+				((ImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_content_picture);	
 			}
 			else
 			{
@@ -371,7 +374,14 @@ public class FragmentCategory extends SherlockFragmentActivity {
 			Log.i("LoaderCustom", "Item clicked: " + id);
 			
 			Category categorySelected = mAdapter.getItem((int) id);
-			Toast.makeText(getActivity(), "Categoria Clickeada: "+categorySelected.getName(), Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), "Categoría: "+categorySelected.getName(), Toast.LENGTH_SHORT).show();
+			
+			Intent intent = new Intent();
+	        intent.setClass(getActivity(), FragmentStoreCategory.class);
+	        intent.putExtra("pe.qhawpay.android.FragmentStoreCategory.slug", categorySelected.getSlug());
+	        intent.putExtra("pe.qhawpay.android.FragmentStoreCategory.name", categorySelected.getName());
+	        startActivity(intent);
+			
 						
 		}
 

@@ -25,7 +25,7 @@ public class MainActivity extends SherlockFragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_tabs_pager);
+        setContentView(R.layout.main);
         
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
@@ -40,8 +40,8 @@ public class MainActivity extends SherlockFragmentActivity {
         mTabsAdapter.addTab(mTabHost.newTabSpec("servicios").setIndicator("Servicios"),
                 FragmentService.ServiceListFragment.class, null);
 
-        mTabsAdapter.addTab(mTabHost.newTabSpec("the_best").setIndicator("Mejores"),
-        		FragmentService.ServiceListFragment.class, null);        
+        mTabsAdapter.addTab(mTabHost.newTabSpec("the_best").setIndicator("Mejores Lugares"),
+        		FragmentStore.StoreListFragment.class, null);        
         
         if (savedInstanceState != null) {
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
