@@ -13,9 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import pe.qhawpay.android.application.QhawpayApplication;
 import pe.qhawpay.android.domain.Store;
 import pe.qhawpay.android.domain.StoreList;
 import android.content.Context;
+import android.content.Intent;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -33,6 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.SherlockListFragment;
@@ -40,8 +43,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.androidquery.AQuery;
-import com.markupartist.android.widget.PullToRefreshListView;
-import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
 
 public class FragmentStore extends SherlockFragmentActivity {
 
@@ -60,7 +61,7 @@ public class FragmentStore extends SherlockFragmentActivity {
 	    
 	    //getSupportActionBar().setSubtitle(subtitle);
 		
-		setTitle("Mejores Lugares ");
+		setTitle("Mejores Lugares");
 		
 		
 		
@@ -90,9 +91,9 @@ public class FragmentStore extends SherlockFragmentActivity {
 
 		List<Store> mservices;
 		private String filter;
-		private String page;
+		private Integer page;
 
-		public StoreListLoader(Context context, String textFilter, String textPage) {
+		public StoreListLoader(Context context, String textFilter, Integer textPage) {
 			super(context);
 			filter = textFilter;
 			page = textPage;
@@ -112,12 +113,9 @@ public class FragmentStore extends SherlockFragmentActivity {
 				String url;
 				
 				filter = (filter == null)? "0" : filter;
-				
-				page = (page == null )? "1": page;
-				
-				
 
-				url = getContext().getString(R.string.base_uri)+ "/store/name/"+filter+"/created_at/a/10/"+page+".json";
+
+				url = getContext().getString(R.string.base_uri)+ "/store/name/"+filter+"/created_at/a/20/"+page.toString()+".json";
 				
 				Log.i(TAG, "API REST get called: " + url);
 				
@@ -271,7 +269,7 @@ public class FragmentStore extends SherlockFragmentActivity {
 			View view;
 
 			if (convertView == null) {
-				view = mInflater.inflate(R.layout.pull_to_refresh, parent, false);
+				view = mInflater.inflate(R.layout.list_item_icon_text, parent, false);
 			} else {
 				view = convertView;
 			}
@@ -285,14 +283,14 @@ public class FragmentStore extends SherlockFragmentActivity {
 			else
 			{
 				AQuery aq = new AQuery(view);
-				aq.id(R.id.pull_to_refresh_image).image(getContext().getString(R.string.store_base_uri)+ item.getLogo(), true, true, 0,0, null, AQuery.FADE_IN_NETWORK);
+				aq.id(R.id.icon).image(getContext().getString(R.string.store_base_uri)+ item.getLogo(), true, true, 0,0, null, AQuery.FADE_IN_NETWORK);
 			}			
 			
 			
 			
 			
 			
-			((TextView) view.findViewById(R.id.pull_to_refresh_text)).setText(item.getName());
+			((TextView) view.findViewById(R.id.text)).setText(item.getName());
 
 			return view;
 		}
@@ -303,7 +301,7 @@ public class FragmentStore extends SherlockFragmentActivity {
 		// This is the Adapter being used to display the list's data.
 		StoreListAdapter mAdapter;
 		
-		Integer page = 0;
+		Integer page = 1;
 
 		// If non-null, this is the current filter the user has provided.
 		String mCurFilter;
@@ -335,16 +333,14 @@ public class FragmentStore extends SherlockFragmentActivity {
 			// or start a new one.
 			getLoaderManager().initLoader(0, null, this);
 			
-			((PullToRefreshListView) getListView()).setOnRefreshListener(new OnRefreshListener() {
+			/*((PullToRefreshListView) getListView()).setOnRefreshListener(new OnRefreshListener() {
 	            @Override
 	            public void onRefresh() {
 	                // Do work to refresh the list here.
-	            	page++;
-	            	
-	              //  new GetDataTask().execute();
-	            	new StoreListLoader(getActivity(), mCurFilter, page.toString());
+	            	//page++;
+	            	getLoaderManager().restartLoader(0, null, StoreListFragment.this);
 	            }
-	        });
+	        });*/
 			
 		 
 		}
@@ -385,6 +381,17 @@ public class FragmentStore extends SherlockFragmentActivity {
 		public void onListItemClick(ListView l, View v, int position, long id) {
 			// Insert desired behavior here.
 			Log.i(TAG, "Item clicked: " + id);
+			
+			Store storeSelected = mAdapter.getItem((int) id);
+			
+			Toast.makeText(getActivity(), "Establecimiento: "+storeSelected.getName(), Toast.LENGTH_SHORT).show();
+
+			Intent intent = new Intent();
+	        intent.setClass(getActivity(), StoreActivity.class);
+	        
+	        ((QhawpayApplication) getActivity().getApplicationContext()).setStore(storeSelected);
+	        
+	        startActivity(intent);
 		}
 
 		@Override
@@ -392,14 +399,15 @@ public class FragmentStore extends SherlockFragmentActivity {
 			// This is called when a new Loader needs to be created. This
 			// sample only has one Loader with no arguments, so it is simple.
 					
-			Log.i(TAG, "on create loader: " + mCurFilter);
-			return new StoreListLoader(getActivity(), mCurFilter, "1");
+			Log.i(TAG, "on create loader string: " + mCurFilter);
+			Log.i(TAG, "on create loader page: " + page.toString());
+			return new StoreListLoader(getActivity(), mCurFilter, page);
 		}
 
 		@Override
 		public void onLoadFinished(Loader<List<Store>> loader, List<Store> data) {
 			
-			// Set the new data in the adapter.
+			// Set the new data in the adapter.	        
 			mAdapter.setData(data);
 
 			// The list should now be shown.

@@ -83,6 +83,10 @@ public class MainActivity extends SherlockFragmentActivity {
                 clss = _class;
                 args = _args;
             }
+
+			public String getTag() {
+				return tag;
+			}
         }
 
         static class DummyTabFactory implements TabHost.TabContentFactory {

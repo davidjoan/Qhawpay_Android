@@ -108,15 +108,10 @@ public class FragmentCategory extends SherlockFragmentActivity {
 			List<Category> categories = null;
 			try {
 				// The URL for making the GET request
-				String url;
-				if(filter == null)
-				{
-					url = getContext().getString(R.string.base_uri)+ "/category/name/0/created_at/a/10/1.json";
-				}
-				else
-				{
-					url = getContext().getString(R.string.base_uri)+ "/category/name/"+filter+"/created_at/a/10/1.json";
-				}
+				
+				filter = (filter == null) ? "0" : filter;
+			
+				String url = getContext().getString(R.string.base_uri)+ "/category/name/"+filter+"/created_at/a/100/1.json";
 				
 				Log.i(TAG, "API REST get called: " + url);
 				
@@ -127,7 +122,6 @@ public class FragmentCategory extends SherlockFragmentActivity {
 				// Create a new RestTemplate instance
 				RestTemplate restTemplate = new RestTemplate();
 				
-
 				// Add the Gson message converter
 				restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
 
@@ -377,9 +371,11 @@ public class FragmentCategory extends SherlockFragmentActivity {
 			Toast.makeText(getActivity(), "Categoría: "+categorySelected.getName(), Toast.LENGTH_SHORT).show();
 			
 			Intent intent = new Intent();
-	        intent.setClass(getActivity(), FragmentStoreCategory.class);
-	        intent.putExtra("pe.qhawpay.android.FragmentStoreCategory.slug", categorySelected.getSlug());
-	        intent.putExtra("pe.qhawpay.android.FragmentStoreCategory.name", categorySelected.getName());
+	        intent.setClass(getActivity(), StoreCategoryActivity.class);
+	        
+	        intent.putExtra("pe.qhawpay.android.StoreCategoryActivity.slug", categorySelected.getSlug());
+	        intent.putExtra("pe.qhawpay.android.StoreCategoryActivity.name", categorySelected.getName());
+	        
 	        startActivity(intent);
 			
 						
@@ -436,7 +432,6 @@ public class FragmentCategory extends SherlockFragmentActivity {
             Category category = (Category) getListAdapter().getItem(info.position);
             Toast.makeText(getActivity(), "Categoria Seleccionada."+category.getName(), Toast.LENGTH_SHORT).show();
             Log.i(TAG, "id = " + category.getName());
-            
             
             switch (item.getItemId()) {
                 case R.id.share_item:

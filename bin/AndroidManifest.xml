@@ -2,15 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="pe.qhawpay.android"
       android:versionCode="1"
-      android:versionName="1.0">
+      android:versionName="1.0"
+      android:installLocation="auto">
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="15"/>
     
     <uses-permission android:name="android.permission.INTERNET" />
     
     <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
 
-    <application android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:hardwareAccelerated="true">
-        <activity android:name="MainActivity"
+    <application 
+        android:name=".application.QhawpayApplication"
+        android:icon="@drawable/ic_launcher" 
+        android:label="@string/app_name" 
+        android:hardwareAccelerated="true">
+        <activity android:name=".MainActivity"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,9 +23,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="FragmentStoreCategory">        
-        </activity>
-        <activity android:name="PullToRefreshActivity"></activity>
+        
+        <activity android:name="FragmentStoreCategory"></activity>
+        
+        <activity android:name=".StoreServiceActivity"></activity>
+        
+        <activity android:name=".StoreCategoryActivity"></activity>
+        
+        <activity android:name=".StoreActivity"></activity>
 
     </application>
 </manifest>

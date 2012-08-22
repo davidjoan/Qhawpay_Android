@@ -36,7 +36,10 @@ public class Address {
 	
 	private String mobile;
 	
-	private String slug;
+	private String latitude;
+	
+	private String longitude;
+	
 
 	public String getId() {
 		return id;
@@ -94,11 +97,19 @@ public class Address {
 		this.mobile = mobile;
 	}
 
-	public String getSlug() {
-		return slug;
+	public String getLatitude() {
+		return latitude;
 	}
 
-	public void setSlug(String slug) {
-		this.slug = slug;
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 }

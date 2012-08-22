@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-
 import pe.qhawpay.android.domain.Service;
 import pe.qhawpay.android.domain.ServiceList;
 import android.content.Context;
@@ -36,6 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.SherlockListFragment;
@@ -86,7 +86,6 @@ public class FragmentService extends SherlockFragmentActivity {
 		public ServiceListLoader(Context context, String textFilter) {
 			super(context);
 			filter = textFilter;
-
 		}
 
 		/**
@@ -99,15 +98,10 @@ public class FragmentService extends SherlockFragmentActivity {
 			List<Service> services = null;
 			try {
 				// The URL for making the GET request
-				String url;
-				if(filter == null)
-				{
-					url = getContext().getString(R.string.base_uri)+ "/service/name/0/created_at/a/100/1.json";
-				}
-				else
-				{
-					url = getContext().getString(R.string.base_uri)+ "/service/name/"+filter+"/created_at/a/100/1.json";
-				}
+				
+				filter = (filter == null) ? "0" : filter;
+				
+				String url = getContext().getString(R.string.base_uri)+ "/service/name/"+filter+"/created_at/a/100/1.json";
 				
 				Log.i(TAG, "API REST get called: " + url);
 				
@@ -117,7 +111,6 @@ public class FragmentService extends SherlockFragmentActivity {
 
 				// Create a new RestTemplate instance
 				RestTemplate restTemplate = new RestTemplate();
-				
 
 				// Add the Gson message converter
 				restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
@@ -356,8 +349,16 @@ public class FragmentService extends SherlockFragmentActivity {
 			// Insert desired behavior here.
 			Log.i("LoaderCustom", "Item clicked: " + id);
 			
+			Service serviceSelected = mAdapter.getItem((int) id);
+			
+			Toast.makeText(getActivity(), "Servicio: "+serviceSelected.getName(), Toast.LENGTH_SHORT).show();
+
 			Intent intent = new Intent();
-	        intent.setClass(getActivity(), PullToRefreshActivity.class);
+	        intent.setClass(getActivity(), StoreServiceActivity.class);
+	        
+	        intent.putExtra("pe.qhawpay.android.StoreServiceActivity.slug", serviceSelected.getSlug());
+	        intent.putExtra("pe.qhawpay.android.StoreServiceActivity.name", serviceSelected.getName());
+	        
 	        startActivity(intent);
 		}
 

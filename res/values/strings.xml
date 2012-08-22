@@ -8,6 +8,7 @@
     <string name="category_base_uri">http://backend.qhawpay.pe/uploads/category_images/</string>
     <string name="service_base_uri">http://backend.qhawpay.pe/uploads/service_images/</string>
     <string name="store_base_uri">http://backend.qhawpay.pe/uploads/store_images/</string>
+    <string name="photo_base_uri">http://backend.qhawpay.pe/uploads/photo_images/</string>
     <string name="fragment_context_menu_msg">Context Menú</string>
     <string name="store_content_description">Imagen de establecimiento</string>
 </resources>
