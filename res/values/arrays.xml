@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="entries_qty_records">
+        <item>5 Registros</item>
+        <item>10 Registros</item>
+        <item>15 Registros</item>
+        <item>20 Registros</item>
+        <item>50 Registros</item>  
+    </string-array>
+
+    <string-array name="entryvalues_qty_records">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>50</item>
+    </string-array>
+</resources>

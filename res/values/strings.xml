@@ -11,4 +11,11 @@
     <string name="photo_base_uri">http://backend.qhawpay.pe/uploads/photo_images/</string>
     <string name="fragment_context_menu_msg">Context Menú</string>
     <string name="store_content_description">Imagen de establecimiento</string>
+    <string name="map_content_description">Imagen de Ubicaciones en el Mapa</string>
+    <string name="map_api_key">0yep91YoypKg4oZlqjDYecBMT5Ckvr2SkAHVDFw</string>
+    <string name="title_list_preference_qty_records">Cantidad de Registros</string>
+    <string name="summary_qty_records">Define la cantidad de registros que la aplicación va obtener en cada consulta</string>
+    <string name="dialog_qty_records">Elige la cantidad de Registros</string>
+    <string name="dialog_based_preferences">Configuraciones de Qhawpay</string>
+    <string name="preference">Preferencias</string>
 </resources>

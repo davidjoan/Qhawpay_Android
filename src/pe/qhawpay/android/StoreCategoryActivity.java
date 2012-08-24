@@ -16,10 +16,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import pe.qhawpay.android.application.QhawpayApplication;
 import pe.qhawpay.android.domain.Store;
 import pe.qhawpay.android.domain.StoreList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,9 +30,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.androidquery.AQuery;
 import com.markupartist.android.widget.PullToRefreshListView;
 import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
@@ -44,6 +49,8 @@ public class StoreCategoryActivity extends SherlockListActivity {
     private String categorySlug;
     
     private Integer page = 1;
+    
+    
 
     /** Called when the activity is first created. */
     @Override
@@ -77,8 +84,32 @@ public class StoreCategoryActivity extends SherlockListActivity {
         
         
     }
+    
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+      switch (item.getItemId()) {
+        case android.R.id.home:
+          finish();break;          
+      }   
+      return true;
+    }
 
 
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+    	Store storeSelected = stores.get(position-1);
+		
+		Toast.makeText(this, "Establecimiento: "+storeSelected.getName(), Toast.LENGTH_SHORT).show();
+
+		Intent intent = new Intent();
+        intent.setClass(this, StoreActivity.class);
+        
+        ((QhawpayApplication) getApplicationContext()).setStore(storeSelected);
+        
+        startActivity(intent);
+
+    }    
     
     
 	public static class StoreListAdapter extends ArrayAdapter<Store> {

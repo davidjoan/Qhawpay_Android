@@ -396,11 +396,7 @@ public class FragmentStore extends SherlockFragmentActivity {
 
 		@Override
 		public Loader<List<Store>> onCreateLoader(int id, Bundle args) {
-			// This is called when a new Loader needs to be created. This
-			// sample only has one Loader with no arguments, so it is simple.
-					
-			Log.i(TAG, "on create loader string: " + mCurFilter);
-			Log.i(TAG, "on create loader page: " + page.toString());
+
 			return new StoreListLoader(getActivity(), mCurFilter, page);
 		}
 

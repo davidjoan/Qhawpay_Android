@@ -25,7 +25,7 @@ public class Address {
 	
 	private String city;
 	
-	private String addres;
+	private String address;
 	
 	@SerializedName(value="zip-code")
 	private String zipCode;
@@ -57,12 +57,12 @@ public class Address {
 		this.city = city;
 	}
 
-	public String getAddres() {
-		return addres;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setAddres(String addres) {
-		this.addres = addres;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getZipCode() {

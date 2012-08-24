@@ -14,11 +14,11 @@ import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 
+import pe.qhawpay.android.application.QhawpayApplication;
 import pe.qhawpay.android.domain.Category;
 import pe.qhawpay.android.domain.CategoryList;
 import android.content.Context;
 import android.content.Intent;
-
 
 import android.os.Bundle;
 
@@ -107,11 +107,14 @@ public class FragmentCategory extends SherlockFragmentActivity {
 		public List<Category> loadInBackground() {
 			List<Category> categories = null;
 			try {
+				
 				// The URL for making the GET request
 				
 				filter = (filter == null) ? "0" : filter;
+				
+				String qtyRecords = ((QhawpayApplication) getContext().getApplicationContext()).getQtyRecords();
 			
-				String url = getContext().getString(R.string.base_uri)+ "/category/name/"+filter+"/created_at/a/100/1.json";
+				String url = getContext().getString(R.string.base_uri)+ "/category/name/"+filter+"/created_at/a/"+qtyRecords+"/1.json";
 				
 				Log.i(TAG, "API REST get called: " + url);
 				

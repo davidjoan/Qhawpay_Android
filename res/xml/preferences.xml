@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceCategory
+            android:title="@string/dialog_based_preferences">
+
+        <ListPreference
+                android:key="qty_of_records"
+                android:title="@string/title_list_preference_qty_records"
+                android:summary="@string/summary_qty_records"
+                android:entries="@array/entries_qty_records"
+                android:entryValues="@array/entryvalues_qty_records"
+                android:dialogTitle="@string/dialog_qty_records"
+                android:defaultValue="10" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

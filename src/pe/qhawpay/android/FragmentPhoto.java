@@ -28,6 +28,7 @@ public final class FragmentPhoto extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+	@SuppressWarnings("deprecation")
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	ImageView text = new ImageView(getActivity());
@@ -46,5 +47,6 @@ public final class FragmentPhoto extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        setUserVisibleHint(true);
     }
 }

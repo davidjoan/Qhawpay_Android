@@ -4,8 +4,12 @@ import java.util.ArrayList;
 
 import com.actionbarsherlock.R;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +26,7 @@ public class MainActivity extends SherlockFragmentActivity {
     ViewPager  mViewPager;
     TabsAdapter mTabsAdapter;
     
+   
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +51,18 @@ public class MainActivity extends SherlockFragmentActivity {
         if (savedInstanceState != null) {
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
         }
+        
+    /*    if(!isNetworkAvailable())
+        {
+        	Crouton.makeText(this, "No Hay Acceso a Internet", Style.CONFIRM).show();
+        }*/
     }
+    
+/*    private boolean isNetworkAvailable() {
+	ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	return activeNetworkInfo != null;
+    }    */
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -54,7 +70,36 @@ public class MainActivity extends SherlockFragmentActivity {
         outState.putString("tab", mTabHost.getCurrentTabTag());
     }
     
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //Used to put dark icons on light action bar
+
+    	menu.add("Refrescar")
+        .setIcon(R.drawable.ic_refresh)
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+    	
+        menu.add("Preferencias").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+        return true;
+    }    
     
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+    	if (item.getTitle() == "Refrescar")
+    	{
+    		finish();
+    		startActivity(getIntent());     		
+    	}
+    	else if (item.getTitle() == "Preferencias")
+    	{
+			Intent intent = new Intent();
+	        intent.setClass(this, PreferenceActivity.class);
+	        
+	        startActivity(intent);    		
+    	}
+        return true;
+    }    
     /**
      * This is a helper class that implements the management of tabs and all
      * details of connecting a ViewPager with associated TabHost.  It relies on a
